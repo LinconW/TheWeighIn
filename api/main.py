@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from db import models, crud
 from schemas import schemas
 from db.database import Base, engine, SessionLocal
+
 app = FastAPI()
 
 # create tables
