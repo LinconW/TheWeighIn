@@ -24,7 +24,15 @@ class WeighInClient:
     
     # TODO implement REST DELETE function
     def delete_weight_entry(self, entry_id):
-        return
+        response = requests.delete(f"{self.base_url}/entries/{entry_id}")
+        
+        if response.status_code != 200:
+            return {
+                "error": True,
+                "status_code": response.status_code,
+                "detail": response.text
+            }
+        return response.json()
     
     # TODO implement REST PUT/PATCH function
     def update_weight_entry(self, entry_id, weight, calories):

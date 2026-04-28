@@ -1,4 +1,5 @@
 import tkinter as tk
+from core.WeightPlot import WeightPlot
 
 class TheWeighInGUI:
     
@@ -33,10 +34,40 @@ class TheWeighInGUI:
             command=self.submit_entry
             )
         self.add_button.pack()
+        
+        self.show_graph_button = tk.Button(
+            self.root,
+            text = "Show Graph",
+            command=self.show_graph
+        )
+        self.show_graph_button.pack()
+        
+        
+        self.weight_ID_entry = tk.Entry(self.root)
+        self.weight_ID_entry.pack()
+        self.delete_entry_button = tk.Button(
+            self.root,
+            text = "Delete Entry",
+            command=self.delete_entry
+        )
+        self.delete_entry_button.pack()
 
 
     def bind_events(self):
         pass
+    
+    def delete_entry(self):
+        delete_id = self.weight_ID_entry.get().strip()
+        self.client.delete_weight_entry(delete_id)
+    
+    def show_graph(self):
+        weight_data = self.client.get_weight_entries()
+        print(weight_data)
+        weights = [entry["weight"] for entry in weight_data]
+        dates = [entry["date"] for entry in weight_data]
+        weight_plot = WeightPlot("Date", "Weight", dates, weights)
+        weight_plot.show_plot()
+        
     
     def submit_entry(self):
         weight_text = self.weight_entry.get().strip()

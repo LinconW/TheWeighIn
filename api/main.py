@@ -28,8 +28,10 @@ def root():
 def add_entry(entry: schemas.WeightCreate, db: Session = Depends(get_db)):
     return crud.create_entry(db, entry)
 
-
 @app.get("/entries", response_model=list[schemas.WeightResponse])
 def read_entries(db: Session = Depends(get_db)):
     return crud.get_entries(db)
 
+@app.delete("/entries/{entry_id}")
+def delete_entry(entry_id: int, db: Session = Depends(get_db)):
+    return crud.delete_entry(db, entry_id)
