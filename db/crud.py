@@ -23,3 +23,20 @@ def delete_entry(db: Session, entry_id: int):
     db.commit()
     
     return entry
+
+def update_entry(db: Session, entry_id: int, entry_update):
+    db_entry = db.query(models.WeightEntry).filter(models.WeightEntry.id == entry_id).first()
+
+    if not db_entry:
+        return None
+
+    if entry_update.weight is not None:
+        db_entry.weight = entry_update.weight
+
+    if entry_update.calories is not None:
+        db_entry.calories = entry_update.calories
+
+    db.commit()
+    db.refresh(db_entry)
+
+    return db_entry
