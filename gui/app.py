@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import font
 from core.WeightPlot import WeightPlot
 
 class TheWeighInGUI:
@@ -13,21 +14,26 @@ class TheWeighInGUI:
     def run(self):
         self.root.mainloop()
         
-        
-    # TODO Add labels, error messages, and disable submission on invalid input
-    # TODO Add Tkinter Labels and inline validation feedback for weight/calories inputs    def build_ui(self):
     def build_ui(self):
-        # Weight label + entry
+        
+        # date input
+        tk.Label(self.root, text="Date (YYYY-MM-DD)").pack()
+        self.date_entry = tk.Entry(self.root )
+        self.date_entry.pack()
+        tk.Label(self.root, text="leave blank for today's date", fg="grey", font=font.Font(size=8)).pack()
+
+        
+        # weight input
         tk.Label(self.root, text="Weight (lbs)").pack()
         self.weight_entry = tk.Entry(self.root)
         self.weight_entry.pack()
 
-        # Calories label + entry
+        # calorie input
         tk.Label(self.root, text="Calories").pack()
         self.calorie_entry = tk.Entry(self.root)
         self.calorie_entry.pack()
 
-            # Submit button
+        # Submit button
         self.add_button = tk.Button(
             self.root,
             text="Add Entry",
@@ -35,6 +41,7 @@ class TheWeighInGUI:
             )
         self.add_button.pack()
         
+        # Show Graph button
         self.show_graph_button = tk.Button(
             self.root,
             text = "Show Graph",
@@ -42,7 +49,7 @@ class TheWeighInGUI:
         )
         self.show_graph_button.pack()
         
-        
+        # Delete Entry button
         self.weight_ID_entry = tk.Entry(self.root)
         self.weight_ID_entry.pack()
         self.delete_entry_button = tk.Button(
@@ -51,7 +58,6 @@ class TheWeighInGUI:
             command=self.delete_entry
         )
         self.delete_entry_button.pack()
-
 
     def bind_events(self):
         pass
@@ -68,10 +74,10 @@ class TheWeighInGUI:
         weight_plot = WeightPlot("Date", "Weight", dates, weights)
         weight_plot.show_plot()
         
-    
     def submit_entry(self):
         weight_text = self.weight_entry.get().strip()
         calorie_text = self.calorie_entry.get().strip()
+        date_text = self.date_entry.get().strip()
 
         if not weight_text or not calorie_text:
             print("Empty fields")
@@ -81,11 +87,12 @@ class TheWeighInGUI:
             weight = float(weight_text)
             calories = int(calorie_text)
 
-            self.client.create_weight_entry(weight, calories)
+            self.client.create_weight_entry(weight, calories, date_text or None)
 
             # clear inputs AFTER successful submission
             self.weight_entry.delete(0, tk.END)
             self.calorie_entry.delete(0, tk.END)
+            self.date_entry.delete(0, tk.END)
 
         except ValueError:
             print("Invalid input")

@@ -2,9 +2,18 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from db import models
 from schemas import schemas
+from datetime import date 
 
 def create_entry(db: Session, entry: schemas.WeightCreate):
-    db_entry = models.WeightEntry(**entry.model_dump())
+    
+    # Normalize input: default missing date to today
+    entry_data = entry.model_dump()
+        
+    if entry_data["date"] is None:
+        entry_data["date"] = date.today()
+        
+    db_entry = models.WeightEntry(**entry_data)
+    
     db.add(db_entry)
     db.commit()
     db.refresh(db_entry)
