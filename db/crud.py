@@ -49,3 +49,6 @@ def update_entry(db: Session, entry_id: int, entry_update):
     db.refresh(db_entry)
 
     return db_entry
+
+def get_weight_entries(db):
+    return db.query(models.WeightEntry).all()

@@ -42,7 +42,6 @@ class WeighInClient:
             }
         return response.json()
     
-    # TODO implement REST PUT/PATCH function
     def update_weight_entry(self, entry_id, weight, calories):
         payload = {}
 
@@ -65,3 +64,5 @@ class WeighInClient:
             }
 
         return response.json()
+    
+    

@@ -4,13 +4,12 @@ from sqlalchemy.orm import Session
 from db import models, crud
 from schemas import schemas
 from db.database import Base, engine, SessionLocal
+from api.services import average_weight
 
 app = FastAPI()
 
-# create tables
 Base.metadata.create_all(bind=engine)
 
-# dependency
 def get_db():
     db = SessionLocal()
     try:
@@ -46,3 +45,12 @@ def update_entry(
         raise HTTPException(status_code=404, detail="Entry not found")
 
     return updated_entry
+
+@app.get("/weights/stats")
+def get_weight_stats(db: Session = Depends(get_db)):
+    entries = crud.get_entries(db)
+    
+    return {
+        "average_weight": average_weight(entries),
+        "entry_count": len(entries)
+    }

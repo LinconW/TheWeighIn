@@ -8,6 +8,5 @@ def main():
     application = TheWeighInGUI(client)
     application.run()
     
-
 if __name__ == "__main__":
     main()

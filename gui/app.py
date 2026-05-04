@@ -2,13 +2,16 @@ import tkinter as tk
 from tkinter import font
 from core.WeightPlot import WeightPlot
 
+HEIGHT = 300
+WIDTH = 600
+
 class TheWeighInGUI:
     
     def __init__(self, client):
         self.client = client
         self.root = tk.Tk()
         self.root.title("TheWeighIn")
-        self.root.geometry("400x300")
+        self.root.geometry(f"{WIDTH}x{HEIGHT}")
         self.build_ui()
     
     def run(self):
@@ -22,7 +25,6 @@ class TheWeighInGUI:
         self.date_entry.pack()
         tk.Label(self.root, text="leave blank for today's date", fg="grey", font=font.Font(size=8)).pack()
 
-        
         # weight input
         tk.Label(self.root, text="Weight (lbs)").pack()
         self.weight_entry = tk.Entry(self.root)
@@ -55,16 +57,15 @@ class TheWeighInGUI:
         self.delete_entry_button = tk.Button(
             self.root,
             text = "Delete Entry",
-            command=self.delete_entry
+            command=self.delete_entry,
+            
         )
         self.delete_entry_button.pack()
         
         self.status_label = tk.Label(self.root, text="", fg="grey")
         self.status_label.pack()
 
-    def bind_events(self):
-        pass
-    
+
     def delete_entry(self):
         delete_id = self.weight_ID_entry.get().strip()
 
