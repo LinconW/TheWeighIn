@@ -77,7 +77,8 @@ class TheWeighInGUI:
         # TODO add UI controls for preset ranges: 1 week, 1 month, all time
         # TODO call averages endpoint and display returned average weight/calories
         
-        self.averages_label = tk.Label(self.averages_frame, text=" ")
+        self.averages_label = tk.Label(self.averages_frame, text="")
+        self.averages_label.pack()
         
         # ------------ Delete Entry Widgets ------------
         self.weight_ID_entry = tk.Entry(self.delete_entry_frame)
@@ -115,7 +116,6 @@ class TheWeighInGUI:
 
         except ValueError:
             self.status_label.config(text="Invalid input. Weight must be a number and calories must be an integer.", fg="red")
-    
     
     # TODO implement line of best fit to show weight trends. 
     # Reduces noise due to weight fluctuations throughout the week.
@@ -174,6 +174,8 @@ class TheWeighInGUI:
         
     def averages_forum(self):
         self.hide_all_frames()
+        weight_averages = self.client.get_weight_stats()
+        self.averages_label.config(text=f"{weight_averages}")
         self.averages_frame.pack()
         self.exit_button.pack()
         

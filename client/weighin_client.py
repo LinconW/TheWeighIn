@@ -65,4 +65,6 @@ class WeighInClient:
 
         return response.json()
     
-    
+    def get_weight_stats(self):
+        response =requests.get(f"{self.base_url}/weights/stats")
+        return response.json()
