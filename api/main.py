@@ -7,7 +7,6 @@ from db.database import Base, engine, SessionLocal
 from api.services import average_weight
 
 app = FastAPI()
-
 Base.metadata.create_all(bind=engine)
 
 def get_db():
@@ -34,22 +33,15 @@ def delete_entry(entry_id: int, db: Session = Depends(get_db)):
     return crud.delete_entry(db, entry_id)
 
 @app.patch("/entries/{entry_id}", response_model=schemas.WeightResponse)
-def update_entry(
-    entry_id: int,
-    entry: schemas.WeightUpdate,
-    db: Session = Depends(get_db)
-):
+def update_entry(entry_id: int, entry: schemas.WeightUpdate, db: Session = Depends(get_db)):
     updated_entry = crud.update_entry(db, entry_id, entry)
-
     if not updated_entry:
         raise HTTPException(status_code=404, detail="Entry not found")
-
     return updated_entry
 
 @app.get("/weights/stats")
 def get_weight_stats(db: Session = Depends(get_db)):
     entries = crud.get_entries(db)
-    
     return {
         "average_weight": average_weight(entries),
         "entry_count": len(entries)

@@ -13,11 +13,26 @@ class WeightPlot():
         self.create_figure()
        
     def create_figure(self):
+
+        dates = [dt.strptime(date, "%Y-%m-%d") for date in self.x_ax]
+        x_numeric = mdates.date2num(dates)
+        slope, intercept = np.polyfit(x_numeric, self.y_ax, 1)
+        trend_line = slope * x_numeric + intercept
+
         plt.figure()
         plt.title(f"{self.x_title} vs {self.y_title}")
-        plt.xlabel(f"{self.x_title}")
-        plt.ylabel(f"{self.y_title}")
-        plt.plot(self.x_ax, self.y_ax)
+        plt.xlabel(self.x_title)
+        plt.ylabel(self.y_title)
+        plt.plot(dates, self.y_ax, marker="o", label="Actual Weight")
+        plt.plot(dates, trend_line, label="Trend Line")
+        plt.xticks(dates)
+        plt.gca().xaxis.set_major_formatter(
+            mdates.DateFormatter('%Y-%m-%d')
+        )
+
+        plt.gcf().autofmt_xdate()
+
+        plt.legend()
 
     def show_plot(self):
          plt.show()

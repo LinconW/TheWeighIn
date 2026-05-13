@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import font
+from tkinter import ttk
 from core.WeightPlot import WeightPlot
 
-HEIGHT = 300
-WIDTH = 600
+HEIGHT = 400
+WIDTH = 800
 
 class TheWeighInGUI:
     
@@ -64,10 +65,6 @@ class TheWeighInGUI:
         self.add_button = tk.Button(self.entry_frame, text="Add Entry", command=self.submit_entry)
         self.add_button.pack()
         
-        # Status Label
-        self.status_label = tk.Label(self.entry_frame, text="", fg="grey")
-        self.status_label.pack()
-        
         # Exit button is universal
         self.exit_button = tk.Button(self.root, text="Exit", command=self.show_menu)
         
@@ -86,8 +83,19 @@ class TheWeighInGUI:
         self.delete_button = tk.Button(self.delete_entry_frame, text = "Delete Entry", command=self.delete_entry)
         self.delete_button.pack()
     
+        # ------------ Root Widgets ------------
+        # Status Label
+        self.status_label = tk.Label(self.root, text="", fg="grey")
+        
+        self.entries_table = ttk.Treeview(self.root, columns=("ID", "Date", "Weight", "Calories"), show="headings")
+        self.entries_table.heading("ID", text="ID")
+        self.entries_table.heading("Date", text="Date")
+        self.entries_table.heading("Weight", text="Weight")
+        self.entries_table.heading("Calories", text="Calories")
+           
         # ------------ Initial Menu Call ------------
         self.show_menu()
+        self.update_entry_box()
     
     def submit_entry(self):
         weight_text = self.weight_entry.get().strip()
@@ -153,8 +161,24 @@ class TheWeighInGUI:
         self.status_label.config(text="Entry deleted successfully.", fg="green")
         self.weight_ID_entry.delete(0, tk.END)
     
-    def calculate_averages(self):
-        return
+    def update_entry_box(self):
+        for item in self.entries_table.get_children():
+            self.entries_table.delete(item)
+            
+        entries = self.client.get_weight_entries()
+
+        for entry in entries:
+            self.entries_table.insert(
+                "",
+                "end",
+                values=(
+                    entry["id"],
+                    entry["date"],
+                    entry["weight"],
+                    entry["calories"]
+                )
+        )
+        self.entries_table.pack()
     
     def hide_all_frames(self):
         self.menu_frame.pack_forget()
@@ -162,24 +186,35 @@ class TheWeighInGUI:
         self.averages_frame.pack_forget()
         self.delete_entry_frame.pack_forget()
         self.exit_button.pack_forget()
+        self.entries_table.pack_forget()
+        self.status_label.config(text=" ")
+        self.status_label.pack_forget()
         
     def show_menu(self):
         self.hide_all_frames()
         self.menu_frame.pack()
+        self.status_label.pack()
+        self.update_entry_box()
         
     def enter_entry_forum(self):
         self.hide_all_frames()
         self.entry_frame.pack()
         self.exit_button.pack()
+        self.status_label.pack()
+        self.update_entry_box()
+    
         
     def averages_forum(self):
         self.hide_all_frames()
         weight_averages = self.client.get_weight_stats()
         self.averages_label.config(text=f"{weight_averages}")
         self.averages_frame.pack()
+        self.status_label.pack()
         self.exit_button.pack()
         
     def delete_entry_forum(self):
         self.hide_all_frames()
         self.delete_entry_frame.pack()
         self.exit_button.pack()
+        self.status_label.pack()
+        self.update_entry_box()
