@@ -6,7 +6,7 @@ from typing import Optional
 class GoalPhase(str, Enum):
     cut = "cut"
     bulk = "bulk"
-    maintanance = "maintanance"
+    maintenance = "maintenance"
 
 class WeightCreate(BaseModel):
     goal_phase: GoalPhase
@@ -19,13 +19,22 @@ class WeightCreate(BaseModel):
 
 class WeightResponse(BaseModel):
     id: int
+    goal_phase: GoalPhase
     weight: float
+    calories: Optional[int] = Field(default=None, ge=0)
+    protein: Optional[int] = Field(default=None, ge=0)
+    steps: Optional[int] = Field(default=None, ge=0)
+    notes: Optional[str] = Field(default=None, max_length=500)
     date: DateType
-    calories: int 
-    
+     
     class Config:
         from_attributes = True
         
 class WeightUpdate(BaseModel):
+    goal_phase: Optional[GoalPhase] = None
     weight: Optional[float] = Field(default=None, ge=0)
     calories: Optional[int] = Field(default=None, ge=0)
+    protein: Optional[int] = Field(default=None, ge=0)
+    steps: Optional[int] = Field(default=None, ge=0)
+    notes: Optional[str] = Field(default=None, max_length=500)
+    date: Optional[DateType] = None
