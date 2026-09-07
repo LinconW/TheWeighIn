@@ -10,3 +10,6 @@ def main():
     
 if __name__ == "__main__":
     main()
+    
+# TODO: add exeptions for other feilds that may or may not be filled
+# Just to not forget about this project, I will commit it as it is.

@@ -5,10 +5,12 @@ class WeighInClient:
     def __init__(self, base_url):
         self.base_url = base_url
         
-    def create_weight_entry(self, weight, calories, date=None):
+    def create_weight_entry(self, goal_phase, weight, calories, date=None):
         payload = {
+            "goal_phase": goal_phase,
             "weight": weight,
             "calories": calories,
+            
         }
         
         if date:
@@ -68,3 +70,4 @@ class WeighInClient:
     def get_weight_stats(self):
         response =requests.get(f"{self.base_url}/weights/stats")
         return response.json()
+    
